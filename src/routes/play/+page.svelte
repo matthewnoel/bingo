@@ -70,6 +70,8 @@
 		if (gridIdx === FREE_SPACE_INDEX) return;
 		const playableIdx = gridToPlayableIndex(gridIdx);
 		if (playableIdx < 0) return;
+		const label = grid[playableIdx < FREE_SPACE_INDEX ? playableIdx : playableIdx + 1];
+		if (!label) return;
 		checked[playableIdx] = !checked[playableIdx];
 		updateUrl();
 	}
@@ -99,34 +101,44 @@
 		{/if}
 
 		<div
-			class="grid aspect-square gap-1.5 rounded-xl bg-brand p-1.5"
+			class="grid aspect-square gap-1.5 rounded-xl bg-brand p-2"
 			style="grid-template-columns: repeat({GRID_SIZE}, 1fr);"
 		>
 			{#each Array(CELL_COUNT) as _cell, i (i)}
 				{@const isFree = i === FREE_SPACE_INDEX}
+				{@const isBlank = !isFree && grid[i] === ''}
+				{@const isInert = isFree || isBlank}
 				{@const isChecked = checkedGrid[i]}
+				{@const cellClass = isInert
+					? 'cursor-default bg-brand-lighter text-brand font-bold'
+					: isChecked
+						? 'cursor-pointer bg-action font-semibold text-white shadow-inner'
+						: 'cursor-pointer bg-white text-brand border border-brand/10 hover:bg-brand-lighter/60'}
 				<button
 					onclick={() => toggleCell(i)}
-					disabled={isFree}
-					class="relative flex items-center justify-center overflow-hidden rounded-lg p-1 text-center text-xs font-medium transition-all select-none
-						{isFree
-						? 'cursor-default bg-action/20 font-bold text-action-dark'
-						: isChecked
-							? 'bg-action text-white shadow-inner'
-							: 'cursor-pointer bg-white hover:bg-brand-lighter'}"
-					aria-label={isFree
+					disabled={isInert}
+					class="relative flex aspect-square items-center justify-center overflow-hidden rounded-lg p-1.5 text-center text-xs font-medium transition-all select-none sm:text-sm {cellClass}"
+					aria-label={isInert
 						? 'Free space'
-						: `${grid[i] || 'Blank'} - ${isChecked ? 'checked' : 'unchecked'}`}
+						: `${grid[i]} - ${isChecked ? 'checked' : 'unchecked'}`}
 				>
-					<span class="line-clamp-4 leading-tight break-words">{grid[i]}</span>
-					{#if isChecked && !isFree}
-						<span class="absolute inset-0 flex items-center justify-center">
+					<span class="line-clamp-3 leading-snug text-balance break-words">
+						{#if isFree}
+							FREE
+						{:else if !isBlank}
+							{grid[i]}
+						{/if}
+					</span>
+					{#if isChecked && !isInert}
+						<span
+							class="absolute right-0.5 bottom-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white/30 sm:h-5 sm:w-5"
+						>
 							<svg
-								class="h-3/4 w-3/4 opacity-20"
+								class="h-3 w-3 text-white sm:h-3.5 sm:w-3.5"
 								viewBox="0 0 24 24"
 								fill="none"
 								stroke="currentColor"
-								stroke-width="3"
+								stroke-width="3.5"
 							>
 								<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
 							</svg>
