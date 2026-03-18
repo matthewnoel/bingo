@@ -1,4 +1,1 @@
-TODO:
-
-[ ] save a link for the generation page
-[ ] better readability
+Custom bingo via URL params
