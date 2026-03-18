@@ -94,13 +94,13 @@
 {#if initialized}
 	<div class="mx-auto max-w-lg px-4 py-6">
 		{#if hasBingo}
-			<div class="mb-4 rounded-xl border-2 border-amber-400 bg-amber-50 p-4 text-center dark:border-amber-500 dark:bg-amber-950">
-				<span class="text-3xl font-black tracking-widest text-amber-600 dark:text-amber-400">BINGO!</span>
+			<div class="mb-4 rounded-xl border-2 border-action bg-action/10 p-4 text-center">
+				<span class="text-3xl font-black tracking-widest text-action-dark">BINGO!</span>
 			</div>
 		{/if}
 
 		<div
-			class="grid aspect-square gap-1.5 rounded-xl bg-neutral-200 p-1.5 dark:bg-neutral-700"
+			class="grid aspect-square gap-1.5 rounded-xl bg-brand p-1.5"
 			style="grid-template-columns: repeat({GRID_SIZE}, 1fr);"
 		>
 			{#each Array(CELL_COUNT) as _cell, i (i)}
@@ -111,10 +111,10 @@
 					disabled={isFree}
 					class="relative flex items-center justify-center overflow-hidden rounded-lg p-1 text-center text-xs font-medium transition-all select-none
 						{isFree
-						? 'cursor-default bg-amber-100 font-bold text-amber-700 dark:bg-amber-900 dark:text-amber-300'
+						? 'cursor-default bg-action/20 font-bold text-action-dark'
 						: isChecked
-							? 'bg-blue-500 text-white shadow-inner dark:bg-blue-600'
-							: 'cursor-pointer bg-white hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-750'}"
+							? 'bg-action text-white shadow-inner'
+							: 'cursor-pointer bg-white hover:bg-brand-lighter'}"
 					aria-label={isFree ? 'Free space' : `${grid[i] || 'Blank'} - ${isChecked ? 'checked' : 'unchecked'}`}
 				>
 					<span class="line-clamp-4 break-words leading-tight">{grid[i]}</span>
@@ -132,13 +132,13 @@
 		<div class="mt-4 flex gap-3">
 			<button
 				onclick={shareCard}
-				class="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-neutral-800"
+				class="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-neutral-50"
 			>
 				{sharecopied ? 'Link Copied!' : 'Share Card'}
 			</button>
 			<a
 				href={resolve('/')}
-				class="flex-1 rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
+				class="flex-1 rounded-lg bg-action px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-action-dark"
 			>
 				New Game
 			</a>

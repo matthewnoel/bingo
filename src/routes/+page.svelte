@@ -40,7 +40,7 @@
 </svelte:head>
 
 <div class="mx-auto max-w-2xl px-4 py-8">
-	<h1 class="mb-2 text-3xl font-bold">Bingo Card Creator</h1>
+	<h1 class="mb-2 text-3xl font-bold text-brand">Bingo Card Creator</h1>
 	<p class="mb-6 text-neutral-500">
 		Enter up to {PLAYABLE_CELLS} options for your bingo card. The center space is always free.
 	</p>
@@ -53,11 +53,11 @@
 					type="text"
 					bind:value={options[i]}
 					placeholder="e.g. Makes a basket"
-					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:focus:border-blue-400 dark:focus:ring-blue-800"
+					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
 				/>
 				<button
 					onclick={() => removeOption(i)}
-					class="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/30"
+					class="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500"
 					aria-label="Remove option {i + 1}"
 					disabled={options.length === 1 && !options[0]}
 				>
@@ -73,7 +73,7 @@
 		<button
 			onclick={addOption}
 			disabled={options.length >= PLAYABLE_CELLS}
-			class="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-neutral-600 dark:hover:bg-neutral-800"
+			class="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
 		>
 			+ Add Option
 		</button>
@@ -85,14 +85,14 @@
 	<button
 		onclick={generateLink}
 		disabled={filledCount === 0}
-		class="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+		class="w-full rounded-lg bg-action px-6 py-3 font-semibold text-white transition-colors hover:bg-action-dark disabled:cursor-not-allowed disabled:opacity-40"
 	>
 		Generate Bingo Link
 	</button>
 
 	{#if generatedLink}
-		<div class="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800">
-			<p class="mb-2 text-sm font-medium text-neutral-600 dark:text-neutral-300">
+		<div class="mt-6 rounded-lg border border-brand/10 bg-brand-lighter p-4">
+			<p class="mb-2 text-sm font-medium text-brand">
 				Share this link with players:
 			</p>
 			<div class="flex gap-2">
@@ -100,11 +100,11 @@
 					type="text"
 					readonly
 					value={generatedLink}
-					class="flex-1 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm select-all dark:border-neutral-600 dark:bg-neutral-900"
+					class="flex-1 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm select-all"
 				/>
 				<button
 					onclick={copyLink}
-					class="shrink-0 rounded-lg bg-neutral-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700 dark:bg-neutral-200 dark:text-neutral-900 dark:hover:bg-neutral-300"
+					class="shrink-0 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-light"
 				>
 					{copied ? 'Copied!' : 'Copy'}
 				</button>
