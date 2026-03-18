@@ -130,7 +130,7 @@
 		<Button onclick={generateLink} label="Generate Bingo Link" disabled={filledCount === 0} />
 		<Button
 			onclick={copyConfig}
-			label={configCopied ? 'Copied!' : 'Share Config'}
+			label={configCopied ? 'Copied!' : 'Share Board Config'}
 			variant="secondary"
 			disabled={filledCount === 0}
 		/>
