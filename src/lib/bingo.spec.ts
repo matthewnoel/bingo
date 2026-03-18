@@ -14,8 +14,7 @@ import {
 	playableToGridIndex,
 	PLAYABLE_CELLS,
 	FREE_SPACE_INDEX,
-	CELL_COUNT,
-	GRID_SIZE
+	CELL_COUNT
 } from './bingo';
 
 describe('encodeOptions / decodeOptions', () => {
