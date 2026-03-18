@@ -20,6 +20,7 @@
 		FREE_SPACE_INDEX,
 		PLAYABLE_CELLS
 	} from '$lib/bingo';
+	import Button from '$lib/components/Button.svelte';
 
 	let options = $state<string[]>([]);
 	let board = $state<number[]>([]);
@@ -136,12 +137,11 @@
 		</div>
 
 		<div class="mt-4 flex gap-3">
-			<button
+			<Button
 				onclick={shareCard}
-				class="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-neutral-50"
-			>
-				{sharecopied ? 'Link Copied!' : 'Share Card'}
-			</button>
+				label={sharecopied ? 'Link Copied!' : 'Share Card'}
+				variant="secondary"
+			/>
 			<a
 				href={resolve('/')}
 				class="flex-1 rounded-lg bg-action px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-action-dark"
