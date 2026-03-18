@@ -1,10 +1,15 @@
 <script lang="ts">
+	import { tick, untrack } from 'svelte';
+	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
-	import { encodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
+	import { encodeOptions, decodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
+	import Button from '$lib/components/Button.svelte';
 
 	let options = $state<string[]>(['']);
+	let inputElements = $state<HTMLInputElement[]>([]);
 	let generatedLink = $state('');
 	let copied = $state(false);
+	let configCopied = $state(false);
 
 	function addOption() {
 		options.push('');
@@ -32,6 +37,47 @@
 		setTimeout(() => (copied = false), 2000);
 	}
 
+	function getConfigUrl(): string {
+		const filtered = options.map((o) => o.trim()).filter(Boolean);
+		if (filtered.length === 0) return '';
+		const encoded = encodeURIComponent(encodeOptions(filtered));
+		return `${window.location.origin}${resolve(`/?options=${encoded}`)}`;
+	}
+
+	async function copyConfig() {
+		const url = getConfigUrl();
+		if (!url) return;
+		await navigator.clipboard.writeText(url);
+		configCopied = true;
+		setTimeout(() => (configCopied = false), 2000);
+	}
+
+	function loadFromUrl() {
+		const optionsParam = page.url.searchParams.get('options');
+		if (optionsParam) {
+			const decoded = decodeOptions(optionsParam);
+			if (decoded.length > 0) {
+				options = decoded;
+			}
+		}
+	}
+
+	$effect(() => {
+		untrack(() => loadFromUrl());
+	});
+
+	async function handleKeydown(event: KeyboardEvent, index: number) {
+		if (event.key !== 'Enter') return;
+		event.preventDefault();
+		if (options.length < PLAYABLE_CELLS) {
+			addOption();
+			await tick();
+			inputElements[index + 1]?.focus();
+		} else {
+			generateLink();
+		}
+	}
+
 	const filledCount = $derived(options.filter((o) => o.trim()).length);
 </script>
 
@@ -50,51 +96,45 @@
 			<div class="flex items-center gap-2">
 				<span class="w-7 text-right text-sm text-neutral-400">{i + 1}.</span>
 				<input
+					bind:this={inputElements[i]}
 					type="text"
 					bind:value={options[i]}
-					placeholder="e.g. Makes a basket"
+					onkeydown={(e) => handleKeydown(e, i)}
+					placeholder="e.g. Says the word veneer"
 					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
 				/>
-				<button
+				<Button
 					onclick={() => removeOption(i)}
-					class="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-500"
+					label="✕"
+					variant="secondary"
 					aria-label="Remove option {i + 1}"
 					disabled={options.length === 1 && !options[0]}
-				>
-					<svg
-						class="h-4 w-4"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						stroke-width="2"
-					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</button>
+				/>
 			</div>
 		{/each}
 	</div>
 
 	<div class="mb-6 flex items-center gap-3">
-		<button
+		<Button
 			onclick={addOption}
+			label="+ Add Option"
+			variant="secondary"
 			disabled={options.length >= PLAYABLE_CELLS}
-			class="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-40"
-		>
-			+ Add Option
-		</button>
+		/>
 		<span class="text-sm text-neutral-400">
 			{filledCount}/{PLAYABLE_CELLS} squares filled
 		</span>
 	</div>
 
-	<button
-		onclick={generateLink}
-		disabled={filledCount === 0}
-		class="w-full rounded-lg bg-action px-6 py-3 font-semibold text-white transition-colors hover:bg-action-dark disabled:cursor-not-allowed disabled:opacity-40"
-	>
-		Generate Bingo Link
-	</button>
+	<div class="flex gap-3">
+		<Button onclick={generateLink} label="Generate Bingo Link" disabled={filledCount === 0} />
+		<Button
+			onclick={copyConfig}
+			label={configCopied ? 'Copied!' : 'Share Config'}
+			variant="secondary"
+			disabled={filledCount === 0}
+		/>
+	</div>
 
 	{#if generatedLink}
 		<div class="mt-6 rounded-lg border border-brand/10 bg-brand-lighter p-4">
@@ -106,12 +146,7 @@
 					value={generatedLink}
 					class="flex-1 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm select-all"
 				/>
-				<button
-					onclick={copyLink}
-					class="shrink-0 rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-light"
-				>
-					{copied ? 'Copied!' : 'Copy'}
-				</button>
+				<Button onclick={copyLink} label={copied ? 'Copied!' : 'Copy'} />
 			</div>
 		</div>
 	{/if}
