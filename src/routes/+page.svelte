@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
+	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
-	import { encodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
+	import { encodeOptions, decodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
 
 	let options = $state<string[]>(['']);
 	let generatedLink = $state('');
 	let copied = $state(false);
+	let configCopied = $state(false);
 
 	function addOption() {
 		options.push('');
@@ -31,6 +34,35 @@
 		copied = true;
 		setTimeout(() => (copied = false), 2000);
 	}
+
+	function getConfigUrl(): string {
+		const filtered = options.map((o) => o.trim()).filter(Boolean);
+		if (filtered.length === 0) return '';
+		const encoded = encodeURIComponent(encodeOptions(filtered));
+		return `${window.location.origin}${resolve(`/?options=${encoded}`)}`;
+	}
+
+	async function copyConfig() {
+		const url = getConfigUrl();
+		if (!url) return;
+		await navigator.clipboard.writeText(url);
+		configCopied = true;
+		setTimeout(() => (configCopied = false), 2000);
+	}
+
+	function loadFromUrl() {
+		const optionsParam = page.url.searchParams.get('options');
+		if (optionsParam) {
+			const decoded = decodeOptions(optionsParam);
+			if (decoded.length > 0) {
+				options = decoded;
+			}
+		}
+	}
+
+	$effect(() => {
+		untrack(() => loadFromUrl());
+	});
 
 	const filledCount = $derived(options.filter((o) => o.trim()).length);
 </script>
@@ -88,13 +120,22 @@
 		</span>
 	</div>
 
-	<button
-		onclick={generateLink}
-		disabled={filledCount === 0}
-		class="w-full rounded-lg bg-action px-6 py-3 font-semibold text-white transition-colors hover:bg-action-dark disabled:cursor-not-allowed disabled:opacity-40"
-	>
-		Generate Bingo Link
-	</button>
+	<div class="flex gap-3">
+		<button
+			onclick={generateLink}
+			disabled={filledCount === 0}
+			class="flex-1 rounded-lg bg-action px-6 py-3 font-semibold text-white transition-colors hover:bg-action-dark disabled:cursor-not-allowed disabled:opacity-40"
+		>
+			Generate Bingo Link
+		</button>
+		<button
+			onclick={copyConfig}
+			disabled={filledCount === 0}
+			class="shrink-0 rounded-lg border border-brand/20 px-4 py-3 text-sm font-medium text-brand transition-colors hover:bg-brand-lighter disabled:cursor-not-allowed disabled:opacity-40"
+		>
+			{configCopied ? 'Copied!' : 'Share Config'}
+		</button>
+	</div>
 
 	{#if generatedLink}
 		<div class="mt-6 rounded-lg border border-brand/10 bg-brand-lighter p-4">
