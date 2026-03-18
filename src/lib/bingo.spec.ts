@@ -19,7 +19,7 @@ import {
 
 describe('encodeOptions / decodeOptions', () => {
 	it('round-trips a list of options', () => {
-		const opts = ['Makes a basket', "Says the word 'winner'", 'Timeout called'];
+		const opts = ['Says the word veneer', 'Claims to be a Romanov'];
 		expect(decodeOptions(encodeOptions(opts))).toEqual(opts);
 	});
 
