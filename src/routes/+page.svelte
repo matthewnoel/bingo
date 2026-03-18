@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { encodeOptions, decodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
 	import Button from '$lib/components/Button.svelte';
 
 	let options = $state<string[]>(['']);
+	let inputElements = $state<HTMLInputElement[]>([]);
 	let generatedLink = $state('');
 	let copied = $state(false);
 	let configCopied = $state(false);
@@ -65,6 +66,18 @@
 		untrack(() => loadFromUrl());
 	});
 
+	async function handleKeydown(event: KeyboardEvent, index: number) {
+		if (event.key !== 'Enter') return;
+		event.preventDefault();
+		if (options.length < PLAYABLE_CELLS) {
+			addOption();
+			await tick();
+			inputElements[index + 1]?.focus();
+		} else {
+			generateLink();
+		}
+	}
+
 	const filledCount = $derived(options.filter((o) => o.trim()).length);
 </script>
 
@@ -83,8 +96,10 @@
 			<div class="flex items-center gap-2">
 				<span class="w-7 text-right text-sm text-neutral-400">{i + 1}.</span>
 				<input
+					bind:this={inputElements[i]}
 					type="text"
 					bind:value={options[i]}
+					onkeydown={(e) => handleKeydown(e, i)}
 					placeholder="e.g. Says the word veneer"
 					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
 				/>
