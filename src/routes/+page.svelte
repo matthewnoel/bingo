@@ -61,7 +61,13 @@
 					aria-label="Remove option {i + 1}"
 					disabled={options.length === 1 && !options[0]}
 				>
-					<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<svg
+						class="h-4 w-4"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
 						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</button>
@@ -92,9 +98,7 @@
 
 	{#if generatedLink}
 		<div class="mt-6 rounded-lg border border-brand/10 bg-brand-lighter p-4">
-			<p class="mb-2 text-sm font-medium text-brand">
-				Share this link with players:
-			</p>
+			<p class="mb-2 text-sm font-medium text-brand">Share this link with players:</p>
 			<div class="flex gap-2">
 				<input
 					type="text"

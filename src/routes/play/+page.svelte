@@ -44,9 +44,7 @@
 
 		if (boardParam) {
 			board = decodeBoard(boardParam);
-			checked = checkedParam
-				? decodeChecked(checkedParam)
-				: new Array(PLAYABLE_CELLS).fill(false);
+			checked = checkedParam ? decodeChecked(checkedParam) : new Array(PLAYABLE_CELLS).fill(false);
 		} else {
 			board = generateBoard(options.length);
 			checked = new Array(PLAYABLE_CELLS).fill(false);
@@ -115,12 +113,20 @@
 						: isChecked
 							? 'bg-action text-white shadow-inner'
 							: 'cursor-pointer bg-white hover:bg-brand-lighter'}"
-					aria-label={isFree ? 'Free space' : `${grid[i] || 'Blank'} - ${isChecked ? 'checked' : 'unchecked'}`}
+					aria-label={isFree
+						? 'Free space'
+						: `${grid[i] || 'Blank'} - ${isChecked ? 'checked' : 'unchecked'}`}
 				>
-					<span class="line-clamp-4 break-words leading-tight">{grid[i]}</span>
+					<span class="line-clamp-4 leading-tight break-words">{grid[i]}</span>
 					{#if isChecked && !isFree}
 						<span class="absolute inset-0 flex items-center justify-center">
-							<svg class="h-3/4 w-3/4 opacity-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+							<svg
+								class="h-3/4 w-3/4 opacity-20"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="3"
+							>
 								<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
 							</svg>
 						</span>
