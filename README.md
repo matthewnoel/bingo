@@ -1,1 +1,3 @@
-Custom bingo via URL params
+# Bingo
+
+Custom bingo via URL parameters. ([play now](https://matthewnoel.github.io/bingo/))

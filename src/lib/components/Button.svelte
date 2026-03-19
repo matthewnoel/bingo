@@ -8,7 +8,7 @@
 		disabled?: boolean;
 	} & Omit<HTMLButtonAttributes, 'onclick' | 'disabled' | 'class'>;
 
-	let { onclick, label, variant = 'primary', disabled = false, ...rest }: Props = $props();
+	let { onclick, label, variant = 'primary', disabled = false }: Props = $props();
 
 	const variantClasses: Record<string, string> = {
 		primary: 'bg-secondary px-6 py-3 font-semibold text-white hover:brightness-90',
@@ -23,7 +23,6 @@
 	class="rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-40 {variantClasses[
 		variant
 	]}"
-	{...rest}
 >
 	{label}
 </button>
