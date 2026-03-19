@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tick, untrack } from 'svelte';
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { encodeOptions, decodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
 	import Button from '$lib/components/Button.svelte';
@@ -10,6 +11,7 @@
 	let generatedLink = $state('');
 	let copied = $state(false);
 	let configCopied = $state(false);
+	let loaded = $state(false);
 
 	function addOption() {
 		options.push('');
@@ -37,17 +39,8 @@
 		setTimeout(() => (copied = false), 2000);
 	}
 
-	function getConfigUrl(): string {
-		const filtered = options.map((o) => o.trim()).filter(Boolean);
-		if (filtered.length === 0) return '';
-		const encoded = encodeURIComponent(encodeOptions(filtered));
-		return `${window.location.origin}${resolve(`/?options=${encoded}`)}`;
-	}
-
 	async function copyConfig() {
-		const url = getConfigUrl();
-		if (!url) return;
-		await navigator.clipboard.writeText(url);
+		await navigator.clipboard.writeText(window.location.href);
 		configCopied = true;
 		setTimeout(() => (configCopied = false), 2000);
 	}
@@ -60,10 +53,33 @@
 				options = decoded;
 			}
 		}
+		loaded = true;
 	}
 
 	$effect(() => {
 		untrack(() => loadFromUrl());
+	});
+
+	const encodedOptions = $derived.by(() => {
+		const filtered = options.map((o) => o.trim()).filter(Boolean);
+		if (filtered.length === 0) return '';
+		return encodeOptions(filtered);
+	});
+
+	$effect(() => {
+		const encoded = encodedOptions;
+		if (!loaded) return;
+		untrack(() => {
+			if (encoded) {
+				goto(resolve(`/?options=${encodeURIComponent(encoded)}`), {
+					replaceState: true,
+					keepFocus: true,
+					noScroll: true
+				});
+			} else {
+				goto(resolve('/'), { replaceState: true, keepFocus: true, noScroll: true });
+			}
+		});
 	});
 
 	async function handleKeydown(event: KeyboardEvent, index: number) {
