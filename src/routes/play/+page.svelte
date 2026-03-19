@@ -109,11 +109,11 @@
 				{@const isBlank = !isFree && grid[i] === ''}
 				{@const isInert = isFree || isBlank}
 				{@const isChecked = checkedGrid[i]}
-		{@const cellClass = isInert
-			? 'cursor-default bg-white/60 text-primary font-bold'
-			: isChecked
-				? 'cursor-pointer bg-secondary font-semibold text-white shadow-inner'
-				: 'cursor-pointer bg-white text-primary border border-primary/10 hover:bg-white/60'}
+				{@const cellClass = isInert
+					? 'cursor-default bg-white/60 text-primary font-bold'
+					: isChecked
+						? 'cursor-pointer bg-secondary font-semibold text-white shadow-inner'
+						: 'cursor-pointer bg-white text-primary border border-primary/10 hover:bg-white/60'}
 				<button
 					onclick={() => toggleCell(i)}
 					disabled={isInert}
