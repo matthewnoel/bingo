@@ -16,5 +16,8 @@ html {
 		'Helvetica Neue',
 		Arial,
 		sans-serif;
+}
+
+body {
 	touch-action: manipulation;
 }

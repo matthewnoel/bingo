@@ -100,7 +100,7 @@
 					type="text"
 					bind:value={options[i]}
 					onkeydown={(e) => handleKeydown(e, i)}
-					placeholder="e.g. &quot;Says the word &quot;veneer&quot;&quot;"
+					placeholder="e.g. &quot;Says the word 'veneer'&quot;"
 					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
 				/>
 				<Button
@@ -126,18 +126,8 @@
 		</span>
 	</div>
 
-	<div class="flex gap-3">
-		<Button onclick={generateLink} label="Generate Bingo Link" disabled={filledCount === 0} />
-		<Button
-			onclick={copyConfig}
-			label={configCopied ? 'Copied!' : 'Share Board Config'}
-			variant="secondary"
-			disabled={filledCount === 0}
-		/>
-	</div>
-
 	{#if generatedLink}
-		<div class="mt-6 rounded-lg border border-primary/10 bg-primary/10 p-4">
+		<div class="mt-6 mb-6 rounded-lg border border-primary/10 bg-primary/10 p-4">
 			<p class="mb-2 text-sm font-medium text-primary">Share this link with players:</p>
 			<div class="flex gap-2">
 				<input
@@ -150,4 +140,14 @@
 			</div>
 		</div>
 	{/if}
+
+	<div class="flex gap-3">
+		<Button onclick={generateLink} label="Generate Bingo Link" disabled={filledCount === 0} />
+		<Button
+			onclick={copyConfig}
+			label={configCopied ? 'Copied!' : 'Share Board Config'}
+			variant="secondary"
+			disabled={filledCount === 0}
+		/>
+	</div>
 </div>
