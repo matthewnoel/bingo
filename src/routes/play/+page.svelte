@@ -101,7 +101,7 @@
 		{/if}
 
 		<div
-			class="grid aspect-square gap-1.5 rounded-xl bg-brand p-2"
+			class="grid gap-1.5 rounded-xl bg-brand p-2"
 			style="grid-template-columns: repeat({GRID_SIZE}, 1fr);"
 		>
 			{#each Array(CELL_COUNT) as _cell, i (i)}
@@ -117,12 +117,13 @@
 				<button
 					onclick={() => toggleCell(i)}
 					disabled={isInert}
-					class="relative flex aspect-square items-center justify-center overflow-hidden rounded-lg p-1.5 text-center text-xs font-medium transition-all select-none sm:text-sm {cellClass}"
+					class="relative flex min-h-12 items-center justify-center overflow-hidden rounded-lg p-1.5 text-center font-medium transition-all select-none sm:min-h-16 {cellClass}"
+					style="font-size: clamp(0.55rem, 1.8vw, 0.875rem);"
 					aria-label={isInert
 						? 'Free space'
 						: `${grid[i]} - ${isChecked ? 'checked' : 'unchecked'}`}
 				>
-					<span class="line-clamp-3 leading-snug text-balance break-words">
+					<span class="leading-snug text-balance break-all">
 						{#if isFree}
 							FREE
 						{:else if !isBlank}
