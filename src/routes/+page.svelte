@@ -86,7 +86,7 @@
 </svelte:head>
 
 <div class="mx-auto max-w-2xl px-4 py-8">
-	<h1 class="mb-2 text-3xl font-bold text-brand">Bingo Card Creator</h1>
+	<h1 class="mb-2 text-3xl font-bold text-primary">Bingo Card Creator</h1>
 	<p class="mb-6 text-neutral-500">
 		Enter up to {PLAYABLE_CELLS} options for your bingo card. The center space is always free.
 	</p>
@@ -101,7 +101,7 @@
 					bind:value={options[i]}
 					onkeydown={(e) => handleKeydown(e, i)}
 					placeholder="e.g. &quot;Says the word &quot;veneer&quot;&quot;"
-					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
+					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
 				/>
 				<Button
 					onclick={() => removeOption(i)}
@@ -137,8 +137,8 @@
 	</div>
 
 	{#if generatedLink}
-		<div class="mt-6 rounded-lg border border-brand/10 bg-brand-lighter p-4">
-			<p class="mb-2 text-sm font-medium text-brand">Share this link with players:</p>
+		<div class="mt-6 rounded-lg border border-primary/10 bg-primary/10 p-4">
+			<p class="mb-2 text-sm font-medium text-primary">Share this link with players:</p>
 			<div class="flex gap-2">
 				<input
 					type="text"

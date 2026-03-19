@@ -11,7 +11,7 @@
 	let { onclick, label, variant = 'primary', disabled = false, ...rest }: Props = $props();
 
 	const variantClasses: Record<string, string> = {
-		primary: 'bg-action px-6 py-3 font-semibold text-white hover:bg-action-dark',
+		primary: 'bg-secondary px-6 py-3 font-semibold text-white hover:brightness-90',
 		secondary: 'border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-50'
 	};
 </script>

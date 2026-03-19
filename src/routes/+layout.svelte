@@ -9,7 +9,7 @@
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <div class="flex min-h-screen flex-col bg-white text-neutral-900">
-	<header class="border-b border-brand/10 bg-brand">
+	<header class="border-b border-primary/10 bg-primary">
 		<div class="mx-auto flex max-w-2xl items-center px-4 py-3">
 			<a href={resolve('/')} class="text-lg font-bold tracking-tight text-white">Bingo</a>
 		</div>

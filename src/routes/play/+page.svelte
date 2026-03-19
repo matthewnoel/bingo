@@ -95,13 +95,13 @@
 {#if initialized}
 	<div class="mx-auto max-w-lg px-4 py-6">
 		{#if hasBingo}
-			<div class="mb-4 rounded-xl border-2 border-action bg-action/10 p-4 text-center">
-				<span class="text-3xl font-black tracking-widest text-action-dark">BINGO!</span>
+			<div class="mb-4 rounded-xl border-2 border-secondary bg-secondary/10 p-4 text-center">
+				<span class="text-3xl font-black tracking-widest text-secondary">BINGO!</span>
 			</div>
 		{/if}
 
 		<div
-			class="grid gap-1.5 rounded-xl bg-brand p-2"
+			class="grid gap-1.5 rounded-xl bg-primary p-2"
 			style="grid-template-columns: repeat({GRID_SIZE}, 1fr);"
 		>
 			{#each Array(CELL_COUNT) as _cell, i (i)}
@@ -109,11 +109,11 @@
 				{@const isBlank = !isFree && grid[i] === ''}
 				{@const isInert = isFree || isBlank}
 				{@const isChecked = checkedGrid[i]}
-				{@const cellClass = isInert
-					? 'cursor-default bg-brand-lighter text-brand font-bold'
-					: isChecked
-						? 'cursor-pointer bg-action font-semibold text-white shadow-inner'
-						: 'cursor-pointer bg-white text-brand border border-brand/10 hover:bg-brand-lighter/60'}
+		{@const cellClass = isInert
+			? 'cursor-default bg-white/60 text-primary font-bold'
+			: isChecked
+				? 'cursor-pointer bg-secondary font-semibold text-white shadow-inner'
+				: 'cursor-pointer bg-white text-primary border border-primary/10 hover:bg-white/60'}
 				<button
 					onclick={() => toggleCell(i)}
 					disabled={isInert}
@@ -157,7 +157,7 @@
 			/>
 			<a
 				href={resolve('/')}
-				class="flex-1 rounded-lg bg-action px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-action-dark"
+				class="flex-1 rounded-lg bg-secondary px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:brightness-90"
 			>
 				New Game
 			</a>
