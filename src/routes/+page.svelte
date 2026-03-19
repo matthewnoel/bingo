@@ -100,7 +100,7 @@
 					type="text"
 					bind:value={options[i]}
 					onkeydown={(e) => handleKeydown(e, i)}
-					placeholder="e.g. Says the word veneer"
+					placeholder='e.g. Says the word "veneer"'
 					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
 				/>
 				<Button
