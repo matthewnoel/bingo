@@ -15,7 +15,8 @@
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"licenses": "npx generate-license-file --input package.json --output third-party-licenses.txt --overwrite"
+		"licenses": "npx generate-license-file --input package.json --output third-party-licenses.txt --overwrite",
+		"generate:favicon": "node scripts/generate-favicon.js"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
@@ -35,9 +36,11 @@
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
+		"sharp": "^0.34.5",
 		"svelte": "^5.51.0",
 		"svelte-check": "^4.4.2",
 		"tailwindcss": "^4.1.18",
+		"to-ico": "^1.1.5",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.54.0",
 		"vite": "^7.3.1",

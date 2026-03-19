@@ -1,11 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-	--color-brand: #412772;
-	--color-brand-light: #5a3a94;
-	--color-brand-lighter: #f0ebf5;
-	--color-action: #59aa50;
-	--color-action-dark: #4a9143;
+	--color-primary: #412772;
+	--color-secondary: #59aa50;
 }
 
 html {
@@ -19,5 +16,8 @@ html {
 		'Helvetica Neue',
 		Arial,
 		sans-serif;
+}
+
+body {
 	touch-action: manipulation;
 }

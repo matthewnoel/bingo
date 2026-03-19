@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tick, untrack } from 'svelte';
 	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { encodeOptions, decodeOptions, PLAYABLE_CELLS } from '$lib/bingo';
 	import Button from '$lib/components/Button.svelte';
@@ -10,6 +11,7 @@
 	let generatedLink = $state('');
 	let copied = $state(false);
 	let configCopied = $state(false);
+	let loaded = $state(false);
 
 	function addOption() {
 		options.push('');
@@ -37,17 +39,8 @@
 		setTimeout(() => (copied = false), 2000);
 	}
 
-	function getConfigUrl(): string {
-		const filtered = options.map((o) => o.trim()).filter(Boolean);
-		if (filtered.length === 0) return '';
-		const encoded = encodeURIComponent(encodeOptions(filtered));
-		return `${window.location.origin}${resolve(`/?options=${encoded}`)}`;
-	}
-
 	async function copyConfig() {
-		const url = getConfigUrl();
-		if (!url) return;
-		await navigator.clipboard.writeText(url);
+		await navigator.clipboard.writeText(window.location.href);
 		configCopied = true;
 		setTimeout(() => (configCopied = false), 2000);
 	}
@@ -60,10 +53,33 @@
 				options = decoded;
 			}
 		}
+		loaded = true;
 	}
 
 	$effect(() => {
 		untrack(() => loadFromUrl());
+	});
+
+	const encodedOptions = $derived.by(() => {
+		const filtered = options.map((o) => o.trim()).filter(Boolean);
+		if (filtered.length === 0) return '';
+		return encodeOptions(filtered);
+	});
+
+	$effect(() => {
+		const encoded = encodedOptions;
+		if (!loaded) return;
+		untrack(() => {
+			if (encoded) {
+				goto(resolve(`/?options=${encodeURIComponent(encoded)}`), {
+					replaceState: true,
+					keepFocus: true,
+					noScroll: true
+				});
+			} else {
+				goto(resolve('/'), { replaceState: true, keepFocus: true, noScroll: true });
+			}
+		});
 	});
 
 	async function handleKeydown(event: KeyboardEvent, index: number) {
@@ -86,7 +102,7 @@
 </svelte:head>
 
 <div class="mx-auto max-w-2xl px-4 py-8">
-	<h1 class="mb-2 text-3xl font-bold text-brand">Bingo Card Creator</h1>
+	<h1 class="mb-2 text-3xl font-bold text-primary">Bingo Card Creator</h1>
 	<p class="mb-6 text-neutral-500">
 		Enter up to {PLAYABLE_CELLS} options for your bingo card. The center space is always free.
 	</p>
@@ -100,8 +116,8 @@
 					type="text"
 					bind:value={options[i]}
 					onkeydown={(e) => handleKeydown(e, i)}
-					placeholder="e.g. &quot;Says the word &quot;veneer&quot;&quot;"
-					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-brand focus:ring-2 focus:ring-brand/20 focus:outline-none"
+					placeholder="e.g. &quot;Says the word 'veneer'&quot;"
+					class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
 				/>
 				<Button
 					onclick={() => removeOption(i)}
@@ -114,31 +130,21 @@
 		{/each}
 	</div>
 
-	<div class="mb-6 flex items-center gap-3">
+	<div class="mb-6 flex items-center justify-end gap-3">
+		<span class="text-sm text-neutral-400">
+			{filledCount}/{PLAYABLE_CELLS} squares filled
+		</span>
 		<Button
 			onclick={addOption}
 			label="+ Add Option"
 			variant="secondary"
 			disabled={options.length >= PLAYABLE_CELLS}
 		/>
-		<span class="text-sm text-neutral-400">
-			{filledCount}/{PLAYABLE_CELLS} squares filled
-		</span>
-	</div>
-
-	<div class="flex gap-3">
-		<Button onclick={generateLink} label="Generate Bingo Link" disabled={filledCount === 0} />
-		<Button
-			onclick={copyConfig}
-			label={configCopied ? 'Copied!' : 'Share Board Config'}
-			variant="secondary"
-			disabled={filledCount === 0}
-		/>
 	</div>
 
 	{#if generatedLink}
-		<div class="mt-6 rounded-lg border border-brand/10 bg-brand-lighter p-4">
-			<p class="mb-2 text-sm font-medium text-brand">Share this link with players:</p>
+		<div class="mt-6 mb-6 rounded-lg border border-primary/10 bg-primary/10 p-4">
+			<p class="mb-2 text-sm font-medium text-primary">Share this link with players:</p>
 			<div class="flex gap-2">
 				<input
 					type="text"
@@ -150,4 +156,14 @@
 			</div>
 		</div>
 	{/if}
+
+	<div class="flex gap-3">
+		<Button onclick={generateLink} label="Generate Bingo Link" disabled={filledCount === 0} />
+		<Button
+			onclick={copyConfig}
+			label={configCopied ? 'Copied!' : 'Share Board Config'}
+			variant="secondary"
+			disabled={filledCount === 0}
+		/>
+	</div>
 </div>
