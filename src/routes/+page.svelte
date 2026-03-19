@@ -130,16 +130,16 @@
 		{/each}
 	</div>
 
-	<div class="mb-6 flex items-center gap-3">
+	<div class="mb-6 flex items-center justify-end gap-3">
+		<span class="text-sm text-neutral-400">
+			{filledCount}/{PLAYABLE_CELLS} squares filled
+		</span>
 		<Button
 			onclick={addOption}
 			label="+ Add Option"
 			variant="secondary"
 			disabled={options.length >= PLAYABLE_CELLS}
 		/>
-		<span class="text-sm text-neutral-400">
-			{filledCount}/{PLAYABLE_CELLS} squares filled
-		</span>
 	</div>
 
 	{#if generatedLink}
