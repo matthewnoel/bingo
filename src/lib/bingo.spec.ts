@@ -32,6 +32,11 @@ describe('encodeOptions / decodeOptions', () => {
 		const opts = ['Red, white, blue', 'One, two'];
 		expect(decodeOptions(encodeOptions(opts))).toEqual(opts);
 	});
+
+	it('round-trips a large list of options', () => {
+		const opts = Array.from({ length: 50 }, (_, i) => `Option ${i + 1}`);
+		expect(decodeOptions(encodeOptions(opts))).toEqual(opts);
+	});
 });
 
 describe('generateBoard', () => {
@@ -58,11 +63,38 @@ describe('generateBoard', () => {
 		expect(board.every((v) => v >= 0 && v < 30)).toBe(true);
 		expect(new Set(board).size).toBe(PLAYABLE_CELLS);
 	});
+
+	it('handles a large option pool (100)', () => {
+		const board = generateBoard(100);
+		expect(board).toHaveLength(PLAYABLE_CELLS);
+		expect(board.every((v) => v >= 0 && v < 100)).toBe(true);
+		expect(new Set(board).size).toBe(PLAYABLE_CELLS);
+	});
+
+	it('produces different boards from the same large pool across runs', () => {
+		const boards = Array.from({ length: 10 }, () => generateBoard(50));
+		const serialized = new Set(boards.map((b) => b.join(',')));
+		expect(serialized.size).toBeGreaterThan(1);
+	});
+
+	it('selects different subsets of options from a large pool', () => {
+		const boards = Array.from({ length: 10 }, () => generateBoard(50));
+		const usedSets = boards.map((b) => new Set(b));
+		const allIdentical = usedSets.every(
+			(s) => [...s].sort().join() === [...usedSets[0]].sort().join()
+		);
+		expect(allIdentical).toBe(false);
+	});
 });
 
 describe('encodeBoard / decodeBoard', () => {
 	it('round-trips a board', () => {
 		const board = generateBoard(24);
+		expect(decodeBoard(encodeBoard(board))).toEqual(board);
+	});
+
+	it('round-trips a board generated from a large pool', () => {
+		const board = generateBoard(50);
 		expect(decodeBoard(encodeBoard(board))).toEqual(board);
 	});
 
@@ -101,6 +133,17 @@ describe('resolveGrid', () => {
 		const grid = resolveGrid(board, ['Only']);
 		expect(grid[0]).toBe('');
 		expect(grid[FREE_SPACE_INDEX]).toBe('FREE');
+	});
+
+	it('resolves options from a large pool using board indices beyond 23', () => {
+		const options = Array.from({ length: 50 }, (_, i) => `Opt${i}`);
+		const board = generateBoard(50);
+		const grid = resolveGrid(board, options);
+		expect(grid).toHaveLength(CELL_COUNT);
+		expect(grid[FREE_SPACE_INDEX]).toBe('FREE');
+		const nonFree = grid.filter((_, i) => i !== FREE_SPACE_INDEX);
+		expect(nonFree.every((label) => /^Opt\d+$/.test(label))).toBe(true);
+		expect(new Set(nonFree).size).toBe(PLAYABLE_CELLS);
 	});
 });
 
