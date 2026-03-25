@@ -85,13 +85,9 @@
 	async function handleKeydown(event: KeyboardEvent, index: number) {
 		if (event.key !== 'Enter') return;
 		event.preventDefault();
-		if (options.length < PLAYABLE_CELLS) {
-			addOption();
-			await tick();
-			inputElements[index + 1]?.focus();
-		} else {
-			generateLink();
-		}
+		addOption();
+		await tick();
+		inputElements[index + 1]?.focus();
 	}
 
 	const filledCount = $derived(options.filter((o) => o.trim()).length);
@@ -104,7 +100,8 @@
 <div class="mx-auto max-w-2xl px-4 py-8">
 	<h1 class="mb-2 text-3xl font-bold text-primary">Bingo Card Creator</h1>
 	<p class="mb-6 text-neutral-500">
-		Enter up to {PLAYABLE_CELLS} options for your bingo card. The center space is always free.
+		Enter options for your bingo card. Each card uses {PLAYABLE_CELLS} random options, so add more for
+		extra variety between players. The center space is always free.
 	</p>
 
 	<div class="mb-4 flex flex-col gap-2">
@@ -132,14 +129,12 @@
 
 	<div class="mb-6 flex items-center justify-end gap-3">
 		<span class="text-sm text-neutral-400">
-			{filledCount}/{PLAYABLE_CELLS} squares filled
+			{filledCount}
+			{filledCount === 1 ? 'option' : 'options'}{filledCount > PLAYABLE_CELLS
+				? ` (${PLAYABLE_CELLS} random per card)`
+				: ` / ${PLAYABLE_CELLS} to fill a card`}
 		</span>
-		<Button
-			onclick={addOption}
-			label="+ Add Option"
-			variant="secondary"
-			disabled={options.length >= PLAYABLE_CELLS}
-		/>
+		<Button onclick={addOption} label="+ Add Option" variant="secondary" />
 	</div>
 
 	{#if generatedLink}
