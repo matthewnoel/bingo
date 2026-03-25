@@ -117,13 +117,13 @@
 				<button
 					onclick={() => toggleCell(i)}
 					disabled={isInert}
-					class="relative flex min-h-12 items-center justify-center overflow-hidden rounded-lg p-1.5 text-center font-medium transition-all select-none sm:min-h-16 {cellClass}"
+					class="relative flex min-h-12 items-center justify-center rounded-lg p-1.5 text-center font-medium transition-all select-none sm:min-h-16 {cellClass}"
 					style="font-size: clamp(0.55rem, 1.8vw, 0.875rem);"
 					aria-label={isInert
 						? 'Free space'
 						: `${grid[i]} - ${isChecked ? 'checked' : 'unchecked'}`}
 				>
-					<span class="leading-snug text-balance break-all">
+					<span class="leading-snug text-balance break-normal">
 						{#if isFree}
 							FREE
 						{:else if !isBlank}
