@@ -100,8 +100,8 @@
 <div class="mx-auto max-w-2xl px-4 py-8">
 	<h1 class="mb-2 text-3xl font-bold text-primary">Bingo Card Creator</h1>
 	<p class="mb-6 text-neutral-500">
-		Enter options for your bingo card. Each card uses {PLAYABLE_CELLS} random options, so add more
-		for extra variety between players. The center space is always free.
+		Enter options for your bingo card. Each card uses {PLAYABLE_CELLS} random options, so add more for
+		extra variety between players. The center space is always free.
 	</p>
 
 	<div class="mb-4 flex flex-col gap-2">
