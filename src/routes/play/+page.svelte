@@ -93,7 +93,7 @@
 </svelte:head>
 
 {#if initialized}
-	<div class="mx-auto max-w-lg px-4 py-6">
+	<div class="mx-auto max-w-xl min-w-min px-4 py-6">
 		{#if hasBingo}
 			<div class="mb-4 rounded-xl border-2 border-secondary bg-secondary/10 p-4 text-center">
 				<span class="text-3xl font-black tracking-widest text-secondary">BINGO!</span>
