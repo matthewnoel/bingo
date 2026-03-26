@@ -16,7 +16,7 @@
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
 		"licenses": "npx generate-license-file --input package.json --output third-party-licenses.txt --overwrite",
-		"generate:favicon": "node scripts/generate-favicon.js"
+		"generate:favicon": "curl -sL https://raw.githubusercontent.com/matthewnoel/emoji-favicon-generator/main/generate-favicon.mjs -o .generate-favicon.tmp.mjs && node .generate-favicon.tmp.mjs ✅; rm -f .generate-favicon.tmp.mjs"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
